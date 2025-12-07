@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RattChat Plugin Documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --bg-elevated: #151920;
+      --border-subtle: #262b35;
+      --accent: #4ea1ff;
+      --accent-soft: rgba(78, 161, 255, 0.15);
+      --accent-strong: #ffcc33;
+      --text-main: #f4f5f7;
+      --text-muted: #a4a9b3;
+      --code-bg: #11151c;
+      --link: #7ab8ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #151a24 0, #05070a 50%, #020307 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus {
+      text-decoration: underline;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--border-subtle);
+      background: rgba(5, 7, 12, 0.9);
+      padding: 24px 20px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .meta-block {
+      background: rgba(15, 20, 30, 0.9);
+      border-radius: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+      font-size: 0.85rem;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+      color: var(--text-muted);
+    }
+
+    .meta-row strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .meta-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .nav-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .nav {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+      font-size: 0.9rem;
+    }
+
+    .nav > li {
+      margin-bottom: 4px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 6px 10px;
+      border-radius: 8px;
+      color: var(--text-main);
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    .nav a:hover,
+    .nav a:focus {
+      background: rgba(40, 48, 70, 0.7);
+      border-color: var(--accent-soft);
+    }
+
+    .nav .nav-sub {
+      list-style: none;
+      padding-left: 12px;
+      margin: 4px 0 6px 0;
+    }
+
+    .main {
+      padding: 32px 28px 40px;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        padding: 24px 16px 32px;
+      }
+    }
+
+    .main-header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    h1 {
+      margin: 0 0 6px 0;
+      font-size: clamp(1.9rem, 2.2vw, 2.4rem);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .main-header-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    section {
+      margin-bottom: 32px;
+      scroll-margin-top: 80px;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin: 0 0 10px 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin: 20px 0 6px 0;
+    }
+
+    p {
+      margin: 6px 0 10px;
+    }
+
+    ul {
+      margin: 6px 0 10px 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .panel {
+      background: rgba(9, 13, 20, 0.9);
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border-subtle);
+      margin: 10px 0 16px;
+    }
+
+    .panel.highlight {
+      border-color: var(--accent-soft);
+      box-shadow: 0 0 0 1px rgba(78, 161, 255, 0.1);
+    }
+
+    .taglist {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      background: rgba(10, 15, 22, 0.9);
+    }
+
+    .tag.mode {
+      border-color: rgba(255, 204, 51, 0.4);
+      color: var(--accent-strong);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 8px 0 16px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: rgba(9, 13, 20, 0.9);
+      border: 1px solid var(--border-subtle);
+    }
+
+    th,
+    td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid rgba(35, 40, 52, 0.9);
+    }
+
+    th {
+      background: rgba(18, 24, 36, 0.95);
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:nth-child(even) td {
+      background: rgba(12, 16, 24, 0.8);
+    }
+
+    code,
+    pre {
+      font-family: "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.85rem;
+    }
+
+    code {
+      background: var(--code-bg);
+      padding: 2px 4px;
+      border-radius: 4px;
+      border: 1px solid rgba(32, 38, 54, 0.9);
+      color: #e1e7ff;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1px solid rgba(32, 38, 54, 0.9);
+      overflow: auto;
+      margin: 8px 0 14px;
+    }
+
+    pre code {
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+
+    .inline-label {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <aside class="sidebar">
+    <div class="brand">RattChat</div>
+    <div class="subtitle">Roleplay chat plugin for Minecraft servers</div>
+
+    <div class="meta-block">
+      <div class="meta-row">
+        <span>Version</span>
+        <strong>1.0</strong>
+      </div>
+      <div class="meta-row">
+        <span>Minecraft</span>
+        <strong>1.21</strong>
+      </div>
+      <div class="meta-row">
+        <span>Author</span>
+        <strong>Your Name</strong>
+      </div>
+      <div class="meta-row">
+        <span>Package</span>
+        <strong>me.yourname.rattchat</strong>
+      </div>
+      <div class="meta-row">
+        <span>License</span>
+        <strong>Open-source / Custom</strong>
+      </div>
+    </div>
+
+    <div class="nav-title">Contents</div>
+    <ul class="nav">
+      <li><a href="#overview">1. Overview</a></li>
+      <li><a href="#installation">2. Installation</a></li>
+      <li>
+        <a href="#commands">3. Commands</a>
+        <ul class="nav-sub">
+          <li><a href="#commands">3.1 Chat modes</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#permissions">4. Permissions</a>
+      </li>
+      <li>
+        <a href="#configuration">5. Configuration</a>
+        <ul class="nav-sub">
+          <li><a href="#config-default">5.1 Default config</a></li>
+          <li><a href="#config-editing">5.2 Editing</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#formatting">6. In-game formatting</a>
+      </li>
+    </ul>
+
+    <div class="nav-title">Modes</div>
+    <div class="taglist">
+      <span class="tag mode">Whisper</span>
+      <span class="tag mode">Indoor</span>
+      <span class="tag mode">RP</span>
+      <span class="tag mode">Yell</span>
+      <span class="tag mode">DM</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="main-header">
+      <h1>RattChat Plugin Documentation</h1>
+      <div class="main-header-sub">
+        Roleplay-oriented chat system with proximity, modes, and configurable formatting.
+      </div>
+    </header>
+
+    <section id="overview">
+      <h2>1. Overview</h2>
+      <p>
+        RattChat is a roleplay-focused chat plugin for Minecraft servers. It introduces multiple chat modes with
+        configurable ranges and colors, enabling immersive local, indoor, and long-distance roleplay communication.
+      </p>
+
+      <h3>1.1 Chat modes</h3>
+      <div class="panel">
+        <ul>
+          <li><strong>Whisper</strong> – Private, short-range communication</li>
+          <li><strong>Indoor</strong> – Medium-range chat for in-building conversations</li>
+          <li><strong>RP</strong> – Default roleplay mode for descriptive in-game narration</li>
+          <li><strong>Yell</strong> – Long-range shouting across large areas</li>
+          <li><strong>DM</strong> – Server-wide announcements; requires dedicated permission</li>
+        </ul>
+      </div>
+
+      <h3>1.2 Features</h3>
+      <div class="panel highlight">
+        <ul>
+          <li>Configurable chat prefixes, colors, dialogue colors, and ranges via <code>RattChatConfig.yml</code></li>
+          <li>Proximity-based chat visibility per mode</li>
+          <li>Automatic highlighting of dialogue enclosed in quotation marks (<code>" "</code>)</li>
+          <li>Permission-based restriction of DM mode</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="installation">
+      <h2>2. Installation</h2>
+
+      <h3>2.1 Install the plugin</h3>
+      <p>
+        Download or compile <code>RattChat-1.0-SNAPSHOT.jar</code> and place it into your server’s plugins directory:
+      </p>
+      <pre><code>C:\Path\To\MinecraftServer\plugins\</code></pre>
+
+      <h3>2.2 Restart the server</h3>
+      <p>
+        Stop the server, move the jar if necessary, then start the server again. For example:
+      </p>
+      <pre><code>stop</code></pre>
+
+      <h3>2.3 Verify that RattChat is loaded</h3>
+      <p>Run the following command in the server console or in-game (with permissions):</p>
+      <pre><code>/plugins</code></pre>
+      <p>
+        If RattChat is listed in green, the plugin has loaded successfully.
+      </p>
+    </section>
+
+    <section id="commands">
+      <h2>3. Commands</h2>
+
+      <h3>3.1 Chat mode commands</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>Command</th>
+          <th>Description</th>
+          <th>Permission</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>/chatmode Whisper</code></td>
+          <td>Switches the player to Whisper mode (short range).</td>
+          <td><code>rattchat.use</code></td>
+        </tr>
+        <tr>
+          <td><code>/chatmode Indoor</code></td>
+          <td>Switches the player to Indoor mode (medium range).</td>
+          <td><code>rattchat.use</code></td>
+        </tr>
+        <tr>
+          <td><code>/chatmode RP</code></td>
+          <td>Switches the player to RP mode (default roleplay mode).</td>
+          <td><code>rattchat.use</code></td>
+        </tr>
+        <tr>
+          <td><code>/chatmode Yell</code></td>
+          <td>Switches the player to Yell mode (long range).</td>
+          <td><code>rattchat.use</code></td>
+        </tr>
+        <tr>
+          <td><code>/chatmode DM</code></td>
+          <td>Switches the player to DM mode (server-wide chat).</td>
+          <td><code>rattchat.dm</code></td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="permissions">
+      <h2>4. Permissions</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Permission</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><code>rattchat.use</code></td>
+          <td>Allows players to switch between Whisper, Indoor, RP, and Yell modes.</td>
+          <td>Everyone</td>
+        </tr>
+        <tr>
+          <td><code>rattchat.dm</code></td>
+          <td>Allows use of DM mode (server-wide messages).</td>
+          <td>Operators</td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="configuration">
+      <h2>5. Configuration</h2>
+      <p>
+        RattChat creates a configuration file on first load:
+      </p>
+      <pre><code>/plugins/RattChatConfig.yml</code></pre>
+      <p>
+        Use this file to adjust mode prefixes, colors, dialogue colors, and proximity ranges.
+      </p>
+
+      <section id="config-default">
+        <h3>5.1 Default configuration</h3>
+        <pre><code>ChatModes:
+  Whisper:
+    Prefix: "~Whisper~ "
+    Color: LIGHT_PURPLE
+    DialogueColor: DARK_PURPLE
+    Range: 5
+
+  Indoor:
+    Prefix: "~Indoor~ "
+    Color: GREEN
+    DialogueColor: DARK_GREEN
+    Range: 15
+
+  RP:
+    Prefix: "~RP~ "
+    Color: YELLOW
+    DialogueColor: GOLD
+    Range: 30
+
+  Yell:
+    Prefix: "~Yell~ "
+    Color: BLUE
+    DialogueColor: DARK_BLUE
+    Range: 50
+
+  DM:
+    Prefix: "~DM~ "
+    Color: RED
+    DialogueColor: DARK_RED
+    Range: -1  # -1 = no distance limit</code></pre>
+      </section>
+
+      <section id="config-editing">
+        <h3>5.2 Editing the configuration</h3>
+        <ol>
+          <li>Open <code>RattChatConfig.yml</code> in a text editor.</li>
+          <li>Change any <code>Prefix</code>, <code>Color</code>, <code>DialogueColor</code>, or <code>Range</code> values.</li>
+          <li>Save the file.</li>
+          <li>Restart the server for changes to take effect.</li>
+        </ol>
+        <p class="note">
+          Use standard Bukkit/Spigot color names for <code>Color</code> and <code>DialogueColor</code>.
+        </p>
+      </section>
+    </section>
+
+    <section id="formatting">
+      <h2>6. In-game chat formatting</h2>
+
+      <h3>6.1 Mode message examples</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>Chat mode</th>
+          <th>Example output</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Whisper</td>
+          <td><code>~Whisper~ Hello there!</code></td>
+        </tr>
+        <tr>
+          <td>Indoor</td>
+          <td><code>~Indoor~ Welcome inside!</code></td>
+        </tr>
+        <tr>
+          <td>RP</td>
+          <td><code>~RP~ The knight approached.</code></td>
+        </tr>
+        <tr>
+          <td>Yell</td>
+          <td><code>~Yell~ HEY, EVERYONE!</code></td>
+        </tr>
+        <tr>
+          <td>DM</td>
+          <td><code>~DM~ This is a server announcement.</code></td>
+        </tr>
+        </tbody>
+      </table>
+
+      <h3>6.2 Dialogue highlighting</h3>
+      <p>
+        Any text enclosed in quotation marks is rendered using the configured dialogue color for the active mode.
+      </p>
+      <pre><code>~RP~ The wizard said, "You must go now!"</code></pre>
+      <p class="note">
+        In this example, <code>"You must go now!"</code> is displayed using the mode’s <code>DialogueColor</code>, while the
+        rest of the message uses the normal mode c
