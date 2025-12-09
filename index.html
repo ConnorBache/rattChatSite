@@ -54,6 +54,7 @@
         position: static;
         border-right: none;
         border-bottom: 1px solid var(--border-subtle);
+        height: auto;
       }
     }
 
@@ -308,15 +309,32 @@
       padding: 0;
     }
 
-    .inline-label {
-      font-weight: 600;
-      color: var(--accent);
-    }
-
     .note {
       font-size: 0.85rem;
       color: var(--text-muted);
       margin-top: 4px;
+    }
+
+    /* Chat example styling */
+
+    .prefix {
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    .c-lightpurple { color: #D890FF; }
+    .c-darkpurple  { color: #8A2BE2; }
+    .c-green       { color: #55FF55; }
+    .c-darkgreen   { color: #00AA00; }
+    .c-yellow      { color: #FFFF55; }
+    .c-gold        { color: #FFAA00; }
+    .c-blue        { color: #5555FF; }
+    .c-darkblue    { color: #0000AA; }
+    .c-red         { color: #FF5555; }
+    .c-darkred     { color: #AA0000; }
+
+    .dialogue {
+      font-weight: 600;
     }
   </style>
 </head>
@@ -345,7 +363,7 @@
       </div>
       <div class="meta-row">
         <span>License</span>
-        <strong>Open-source</strong>
+        <strong>Open Source</strong>
       </div>
     </div>
 
@@ -359,9 +377,7 @@
           <li><a href="#commands">3.1 Chat modes</a></li>
         </ul>
       </li>
-      <li>
-        <a href="#permissions">4. Permissions</a>
-      </li>
+      <li><a href="#permissions">4. Permissions</a></li>
       <li>
         <a href="#configuration">5. Configuration</a>
         <ul class="nav-sub">
@@ -388,7 +404,7 @@
     <header class="main-header">
       <h1>RattChat Plugin Documentation</h1>
       <div class="main-header-sub">
-        Roleplay-oriented chat system with proximity, modes, and configurable formatting.
+        Roleplay-oriented chat system with proximity, multiple modes, and configurable formatting.
       </div>
     </header>
 
@@ -396,27 +412,28 @@
       <h2>1. Overview</h2>
       <p>
         RattChat is a roleplay-focused chat plugin for Minecraft servers. It introduces multiple chat modes with
-        configurable ranges and colors, enabling immersive local, indoor, and long-distance roleplay communication.
+        configurable ranges and visual styles, enabling immersive local, indoor, and long-distance roleplay
+        communication.
       </p>
 
       <h3>1.1 Chat modes</h3>
       <div class="panel">
         <ul>
-          <li><strong>Whisper</strong> – Private, short-range communication</li>
-          <li><strong>Indoor</strong> – Medium-range chat for in-building conversations</li>
-          <li><strong>RP</strong> – Default roleplay mode for descriptive in-game narration</li>
-          <li><strong>Yell</strong> – Long-range shouting across large areas</li>
-          <li><strong>DM</strong> – Server-wide announcements; requires dedicated permission</li>
+          <li><strong>Whisper</strong> – Private, short-range communication for close conversations.</li>
+          <li><strong>Indoor</strong> – Medium-range chat intended for in-building or confined spaces.</li>
+          <li><strong>RP</strong> – Default roleplay mode for descriptive, in-character narration.</li>
+          <li><strong>Yell</strong> – Long-range shouting to reach players across larger areas.</li>
+          <li><strong>DM</strong> – Server-wide messages, restricted by permission for staff or specific roles.</li>
         </ul>
       </div>
 
       <h3>1.2 Features</h3>
       <div class="panel highlight">
         <ul>
-          <li>Configurable chat prefixes, colors, dialogue colors, and ranges via <code>RattChatConfig.yml</code></li>
-          <li>Proximity-based chat visibility per mode</li>
-          <li>Automatic highlighting of dialogue enclosed in quotation marks (<code>" "</code>)</li>
-          <li>Permission-based restriction of DM mode</li>
+          <li>Proximity-based visibility per chat mode (range configurable per mode).</li>
+          <li>Configurable prefixes, colors, and dialogue colors via <code>RattChatConfig.yml</code>.</li>
+          <li>Automatic highlighting of dialogue text enclosed in quotation marks (<code>" "</code>).</li>
+          <li>Permission-based restriction for DM mode to control access to server-wide messaging.</li>
         </ul>
       </div>
     </section>
@@ -428,7 +445,7 @@
       <p>
         Download or compile <code>RattChat-1.0-SNAPSHOT.jar</code> and place it into your server’s plugins directory:
       </p>
-      <pre><code>C:\Path\To\MinecraftServer\plugins\</code></pre>
+      <pre><code>C:\Path\To\MinecraftServer\plugins\RattChat-1.0-SNAPSHOT.jar</code></pre>
 
       <h3>2.2 Restart the server</h3>
       <p>
@@ -437,10 +454,12 @@
       <pre><code>stop</code></pre>
 
       <h3>2.3 Verify that RattChat is loaded</h3>
-      <p>Run the following command in the server console or in-game (with permissions):</p>
+      <p>
+        Run the following command in the server console or in-game (with sufficient permission):
+      </p>
       <pre><code>/plugins</code></pre>
       <p>
-        If RattChat is listed in green, the plugin has loaded successfully.
+        If RattChat appears in green in the list, the plugin has loaded successfully.
       </p>
     </section>
 
@@ -459,12 +478,12 @@
         <tbody>
         <tr>
           <td><code>/chatmode Whisper</code></td>
-          <td>Switches the player to Whisper mode (short range).</td>
+          <td>Switches the player to Whisper mode (short-range chat).</td>
           <td><code>rattchat.use</code></td>
         </tr>
         <tr>
           <td><code>/chatmode Indoor</code></td>
-          <td>Switches the player to Indoor mode (medium range).</td>
+          <td>Switches the player to Indoor mode (medium-range chat).</td>
           <td><code>rattchat.use</code></td>
         </tr>
         <tr>
@@ -474,12 +493,12 @@
         </tr>
         <tr>
           <td><code>/chatmode Yell</code></td>
-          <td>Switches the player to Yell mode (long range).</td>
+          <td>Switches the player to Yell mode (long-range chat).</td>
           <td><code>rattchat.use</code></td>
         </tr>
         <tr>
           <td><code>/chatmode DM</code></td>
-          <td>Switches the player to DM mode (server-wide chat).</td>
+          <td>Switches the player to DM mode (server-wide messages).</td>
           <td><code>rattchat.dm</code></td>
         </tr>
         </tbody>
@@ -504,7 +523,7 @@
         </tr>
         <tr>
           <td><code>rattchat.dm</code></td>
-          <td>Allows use of DM mode (further range messages with different coloring).</td>
+          <td>Allows use of DM mode (server-wide messaging).</td>
           <td>Operators</td>
         </tr>
         </tbody>
@@ -514,7 +533,7 @@
     <section id="configuration">
       <h2>5. Configuration</h2>
       <p>
-        RattChat creates a configuration file on first load:
+        On first run, RattChat creates a configuration file:
       </p>
       <pre><code>/plugins/RattChatConfig.yml</code></pre>
       <p>
@@ -559,7 +578,7 @@
         <h3>5.2 Editing the configuration</h3>
         <ol>
           <li>Open <code>RattChatConfig.yml</code> in a text editor.</li>
-          <li>Change any <code>Prefix</code>, <code>Color</code>, <code>DialogueColor</code>, or <code>Range</code> values.</li>
+          <li>Change any <code>Prefix</code>, <code>Color</code>, <code>DialogueColor</code>, or <code>Range</code> values as needed.</li>
           <li>Save the file.</li>
           <li>Restart the server for changes to take effect.</li>
         </ol>
@@ -583,23 +602,38 @@
         <tbody>
         <tr>
           <td>Whisper</td>
-          <td><code>~Whisper~ Hello there!</code></td>
+          <td>
+            <span class="prefix">~Whisper~ </span>
+            <span class="c-lightpurple">Hello there!</span>
+          </td>
         </tr>
         <tr>
           <td>Indoor</td>
-          <td><code>~Indoor~ Welcome inside!</code></td>
+          <td>
+            <span class="prefix">~Indoor~ </span>
+            <span class="c-green">Welcome inside!</span>
+          </td>
         </tr>
         <tr>
           <td>RP</td>
-          <td><code>~RP~ The knight approached.</code></td>
+          <td>
+            <span class="prefix">~RP~ </span>
+            <span class="c-yellow">The knight approached.</span>
+          </td>
         </tr>
         <tr>
           <td>Yell</td>
-          <td><code>~Yell~ HEY, EVERYONE!</code></td>
+          <td>
+            <span class="prefix">~Yell~ </span>
+            <span class="c-blue">HEY, EVERYONE!</span>
+          </td>
         </tr>
         <tr>
           <td>DM</td>
-          <td><code>~DM~ The ogre looks hungry.</code></td>
+          <td>
+            <span class="prefix">~DM~ </span>
+            <span class="c-red">This is a server announcement.</span>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -608,10 +642,15 @@
       <p>
         Any text enclosed in quotation marks is rendered using the configured dialogue color for the active mode.
       </p>
-      <pre><code>~RP~ The wizard said, "You must go now!"</code></pre>
+      <p>Example (RP mode):</p>
+      <p>
+        <span class="prefix">~RP~ </span>
+        <span class="c-yellow">The wizard said, </span>
+        <span class="c-gold dialogue">"You must go now!"</span>
+      </p>
       <p class="note">
-        In this example, <code>"You must go now!"</code> is displayed using the mode’s <code>DialogueColor</code>, while the
-        rest of the message uses the normal mode color.
+        In this example, the prefix is white, the main RP text uses the RP color (<code>YELLOW</code>), and the quoted
+        dialogue uses the dialogue color (<code>GOLD</code>), matching the default configuration.
       </p>
     </section>
   </main>
